@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">topmap</string>
+    <string name="topmap">TopMap</string>
+    <string name="mail">Adresse mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Connexion</string>
+    <string name="register">Creer un compte</string>
+    <string name="retour">Retour</string>
+    <string name="name">Nom</string>
+    <string name="firstname">Prenom</string>
+    <string name="dateNaiss">Date de naissance (jj/mm/aaaa)</string>
+    <string name="tel">Numero de telephone</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password_verif">Retaper le mot de passe</string>
+    <string name="groupeName">Nom du groupe</string>
+    <string name="searchFriend">Rechercher un ami</string>
+    <string name="logout">Deconnexion</string>
+</resources>

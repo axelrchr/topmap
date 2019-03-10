@@ -32,8 +32,10 @@ public class MyRequest {
     public void register(final String name, final String firstname, final String dateNaiss, final String mail, final String tel, final String pseudo, final String password, final String passwordVerif, final RegisterCallback callback)
     {
 
+        // URL ANGLET
         String url = "http://192.168.1.14/topmap/register.php";
-
+        // URL TARBES
+        //String url = "http://192.168.1.16/topmap/register.php";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -123,7 +125,10 @@ public class MyRequest {
 
     public void connexion(final String mail, final String password, final LoginCallback callback)
     {
+        // ANGLET
         String url = "http://192.168.1.14/topmap/login.php";
+        // TARBES
+        //String url = "http://192.168.1.16/topmap/login.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -188,6 +193,38 @@ public class MyRequest {
         void onSuccess(String id, String mail, String pseudo);
         //void onSucces(User user);
         void onError(String message);
+    }
+
+    public void creerGroupe(final String nom)
+    {
+        // ANGLET
+        String url = "http://192.168.1.14/topmap/creerGroupe.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.d("APP", response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("APP", "ERROR = " + error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("nom", nom);
+
+                return map;
+            }
+        };
+
+        queue.add(request);
     }
 
 }

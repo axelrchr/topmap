@@ -15,4 +15,7 @@
     <string name="groupeName">Nom du groupe</string>
     <string name="searchFriend">Rechercher un ami</string>
     <string name="logout">Deconnexion</string>
+    <string name="title_activity_create_account">CreateAccountActivity</string>
+    <string name="createAcount">Créer un compte</string>
+    <string name="creerGroupe">Creer un groupe</string>
 </resources>

@@ -16,7 +16,7 @@ public class AccueilActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
     private TextView tv_mail;
-    private Button btn_logout;
+    private Button btn_logout, btn_creerGroupe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class AccueilActivity extends AppCompatActivity {
 
         tv_mail = (TextView) findViewById(R.id.tv_mail);
         btn_logout = (Button) findViewById(R.id.btn_logout);
+        btn_creerGroupe = (Button) findViewById(R.id.btn_creerGroupe);
 
         sessionManager = new SessionManager(this);
         if(sessionManager.isLogged())
@@ -42,6 +43,15 @@ public class AccueilActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ConnexionActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        btn_creerGroupe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CreerGroupeActivity.class);
+                startActivity(intent);
+               // finish();
             }
         });
     }

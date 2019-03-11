@@ -18,4 +18,5 @@
     <string name="title_activity_create_account">CreateAccountActivity</string>
     <string name="createAcount">Créer un compte</string>
     <string name="creerGroupe">Creer un groupe</string>
+    <string name="carte">Voir la carte</string>
 </resources>

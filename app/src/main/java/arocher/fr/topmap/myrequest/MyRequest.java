@@ -195,7 +195,7 @@ public class MyRequest {
         void onError(String message);
     }
 
-    public void creerGroupe(final String nom)
+    public void creerGroupe(final String nom, final CreerGroupeCallback callback)
     {
         // ANGLET
         String url = "http://192.168.1.14/topmap/creerGroupe.php";
@@ -204,14 +204,28 @@ public class MyRequest {
             @Override
             public void onResponse(String response) {
 
-                Log.d("APP", response);
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSuccess("Groupe créée avec succès");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.d("APP", "ERROR = " + error);
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter au réseau");
+                }else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
             }
         }){
             @Override
@@ -225,6 +239,11 @@ public class MyRequest {
         };
 
         queue.add(request);
+    }
+
+    public interface CreerGroupeCallback{
+        void onSuccess(String message);
+        void onError(String message);
     }
 
 }

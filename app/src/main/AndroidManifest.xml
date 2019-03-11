@@ -3,6 +3,8 @@
     package="arocher.fr.topmap">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controler.CreerGroupeActivity"></activity>
+        <activity android:name=".controler.CarteActivity"></activity>
+        <activity android:name=".controler.CreerGroupeActivity" />
         <activity android:name=".controler.AccueilActivity" />
         <activity android:name=".controler.RegisterActivity" />
         <activity android:name=".controler.ConnexionActivity">
@@ -21,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyAV26-vEkZd8JNaAxQ30kZSaUBXWUSwpVQ"/>
     </application>
 
 </manifest>

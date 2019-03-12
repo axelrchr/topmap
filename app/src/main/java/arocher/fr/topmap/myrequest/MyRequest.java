@@ -244,7 +244,7 @@ public class MyRequest {
         void onError(String message);
     }
 
-    public void envoyerCoordonnee(final String lat, final String lng)
+    public void envoyerCoordonnee(final String lat, final String lng, final String id)
     {
         String url = "http://192.168.1.14/topmap/coordonnee.php";
 
@@ -265,6 +265,7 @@ public class MyRequest {
                 Map<String, String> map = new HashMap<>();
                 map.put("lat", lat);
                 map.put("lng", lng);
+                map.put("id", id);
                 return map;
             }
         };

@@ -49,6 +49,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
 
+        sessionManager = new SessionManager(this);
 
     }
 
@@ -129,7 +130,8 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         String lat =  Double.toString(latitude);
         String lng =  Double.toString(longitude);
 
-        request.envoyerCoordonnee(lat, lng);
+        String id = sessionManager.getId();
+        request.envoyerCoordonnee(lat, lng, id);
 
 
         Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();

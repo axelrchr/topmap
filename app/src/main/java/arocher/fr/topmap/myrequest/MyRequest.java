@@ -1,8 +1,6 @@
 package arocher.fr.topmap.myrequest;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.RelativeLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -245,5 +243,34 @@ public class MyRequest {
         void onSuccess(String message);
         void onError(String message);
     }
+
+    public void envoyerCoordonnee(final String lat, final String lng)
+    {
+        String url = "http://192.168.1.14/topmap/coordonnee.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("lat", lat);
+                map.put("lng", lng);
+                return map;
+            }
+        };
+
+        queue.add(request);
+    }
+
 
 }

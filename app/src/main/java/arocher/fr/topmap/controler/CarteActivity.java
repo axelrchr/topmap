@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,6 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import arocher.fr.topmap.R;
+import arocher.fr.topmap.SessionManager;
+import arocher.fr.topmap.VolleySingleton;
+import arocher.fr.topmap.myrequest.MyRequest;
 
 public class CarteActivity extends AppCompatActivity implements LocationListener {
 
@@ -28,6 +32,12 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private static final int PERMS_CALL_ID = 1234;
     private LocationManager lm;
 
+    private RequestQueue queue;
+    private MyRequest request;
+    private SessionManager sessionManager;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +45,11 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
 
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        request = new MyRequest(this, queue);
+
+
     }
 
     @Override
@@ -111,11 +126,19 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        //Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
+        String lat =  Double.toString(latitude);
+        String lng =  Double.toString(longitude);
+
+        request.envoyerCoordonnee(lat, lng);
+
+
+        Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
         if(googleMap != null){
             LatLng googgleLocation = new LatLng(latitude, longitude);
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));
         }
+
+
     }
 
     @Override

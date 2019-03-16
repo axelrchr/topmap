@@ -38,6 +38,9 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
 
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +109,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         {
             lm.removeUpdates(this);
         }
+
     }
 
     @SuppressWarnings("MissingPermission")
@@ -117,7 +121,6 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 CarteActivity.this.googleMap = googleMap;
                 googleMap.moveCamera(CameraUpdateFactory.zoomBy( 40 ));
                 googleMap.setMyLocationEnabled( true );
-                // pour plus d'info https://developers.google.com/maps/documentation/android-sdk/intro?hl=fr
             }
         });
     }

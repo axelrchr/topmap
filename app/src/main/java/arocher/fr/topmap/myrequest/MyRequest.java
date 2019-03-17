@@ -1,6 +1,7 @@
 package arocher.fr.topmap.myrequest;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -10,9 +11,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -266,5 +271,63 @@ public class MyRequest {
         queue.add(request);
     }
 
+    public void recevoirCoordonnee(final recevoirCoordonneeCallback callback )
+    {
+        String url = "https://topmap.alwaysdata.net/recupPos.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+
+                    int nbPos = 0;
+
+                    //Log.d("APP", "CECI EST UN ESPION 1 ");
+                    //Log.d("APP", response);
+
+                    //Log.d("APP", "CECI EST UN ESPION 2");
+                    JSONObject jsonObject = new JSONObject(response);
+                    //Log.d("APP", jsonObject.getString("lat"));
+                    //Log.d("APP", jsonObject.getString("lng"));
+
+                    //Log.d("APP", "CECI EST UN ESPION 3 ");
+                    JSONArray latArray = jsonObject.getJSONArray("lat");
+                    JSONArray lngArray = jsonObject.getJSONArray("lng");
+
+                    //Log.d("APP", "CECI EST UN ESPION 4 ");
+                    //Log.d("APP", "lat : " + latArray + " lng : " + lngArray);
+
+                    //Log.d("APP", "CECI EST UN ESPION 5 ");
+                    for (int i = 0; i < latArray.length(); i++) {
+
+                        //Log.d("APP", String.valueOf(latArray.get(i)));
+                        //Log.d("APP", String.valueOf(lngArray.get(i)));
+                        nbPos++;
+                        callback.onSuccess(Double.parseDouble((String) latArray.get(i)), Double.parseDouble((String) lngArray.get(i)), nbPos);
+                    }
+
+
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public interface recevoirCoordonneeCallback
+    {
+        void onSuccess(double lat, double lng, int nbPos);
+    }
 
 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import arocher.fr.topmap.R;
@@ -36,7 +38,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private MyRequest request;
     private SessionManager sessionManager;
 
-
+// https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
 
 
 
@@ -123,6 +125,14 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 googleMap.setMyLocationEnabled( true );
             }
         });
+
+        request.recevoirCoordonnee(new MyRequest.recevoirCoordonneeCallback() {
+            @Override
+            public void onSuccess(double lat, double lng, int nbPos) {
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lat, lng)));
+            }
+        });
     }
 
     @Override
@@ -136,12 +146,28 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         String id = sessionManager.getId();
         request.envoyerCoordonnee(lat, lng, id);
 
+        googleMap.clear();
+
+        request.recevoirCoordonnee(new MyRequest.recevoirCoordonneeCallback() {
+            @Override
+            public void onSuccess(double lat, double lng, int nbPos) {
+                for(int i = 0; i < nbPos+1; i++)
+                {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(lat, lng)));
+                    Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
+                }
+            }
+        });
 
         Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
         if(googleMap != null){
             LatLng googgleLocation = new LatLng(latitude, longitude);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));
+
         }
+
+
 
 
     }

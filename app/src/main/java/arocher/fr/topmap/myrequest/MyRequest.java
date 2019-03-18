@@ -321,13 +321,12 @@ public class MyRequest {
             @Override
             public void onResponse(String response) {
                 try {
-                    int nbPos = 0;
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray latArray = jsonObject.getJSONArray("lat");
                     JSONArray lngArray = jsonObject.getJSONArray("lng");
+                    JSONArray pseudoArray = jsonObject.getJSONArray("pseudo");
                     for (int i = 0; i < latArray.length(); i++) {
-                        nbPos++;
-                        callback.onSuccess(Double.parseDouble((String) latArray.get(i)), Double.parseDouble((String) lngArray.get(i)), nbPos);
+                        callback.onSuccess(Double.parseDouble((String) latArray.get(i)), Double.parseDouble((String) lngArray.get(i)), (String) pseudoArray.get(i));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -353,7 +352,7 @@ public class MyRequest {
 
     public interface recevoirCoordonneeCallback
     {
-        void onSuccess(double lat, double lng, int nbPos);
+        void onSuccess(double lat, double lng, String pseudo);
     }
 
     public void maPos(final String id, final maPosCallback callback)

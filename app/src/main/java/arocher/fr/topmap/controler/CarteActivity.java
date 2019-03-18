@@ -86,13 +86,11 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 googleMap.clear();
                 request.recevoirCoordonnee(nom.toString(), new MyRequest.recevoirCoordonneeCallback() {
                     @Override
-                    public void onSuccess(double lat, double lng, int nbPos) {
+                    public void onSuccess(double lat, double lng, String pseudo) {
                         googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)));
-                        //Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
                     }
                 });
                 NOM = nom.toString();
-                //Log.d("APP", NOM);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -180,8 +178,8 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         // Recupération des lat et lng des membre du groupe choisi pour placer les marqueurs
         request.recevoirCoordonnee(NOM, new MyRequest.recevoirCoordonneeCallback() {
             @Override
-            public void onSuccess(double lat, double lng, int nbPos) {
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(String.valueOf(nbPos)));
+            public void onSuccess(double lat, double lng, String pseudo) {
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(pseudo));
             }
         });
     }
@@ -211,8 +209,8 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         // Recupération des lat et lng des membre du groupe choisi pour placer les marqueurs
         request.recevoirCoordonnee(NOM, new MyRequest.recevoirCoordonneeCallback() {
             @Override
-            public void onSuccess(double lat, double lng, int nbPos) {
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(String.valueOf(nbPos)));
+            public void onSuccess(double lat, double lng, String pseudo) {
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(pseudo));
             }
         });
         Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();

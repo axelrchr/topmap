@@ -11,6 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -21,6 +24,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import arocher.fr.topmap.R;
 import arocher.fr.topmap.SessionManager;
@@ -33,11 +39,14 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private GoogleMap googleMap;
     private static final int PERMS_CALL_ID = 1234;
     private LocationManager lm;
+    private Spinner spinner_groupe;
 
     private RequestQueue queue;
     private MyRequest request;
     private SessionManager sessionManager;
 
+
+    private final List groupeList = new ArrayList();
 // https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
 
 
@@ -51,10 +60,25 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
 
+        spinner_groupe = (Spinner) findViewById(R.id.spinner_groupe);
+
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
 
         sessionManager = new SessionManager(this);
+
+        request.recupGroupe(new MyRequest.recupGroupeCallback() {
+            @Override
+            public void onSuccess(String nom, int nbGroupe) {
+
+                groupeList.add(nom);
+
+            }
+
+        });
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groupeList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_groupe.setAdapter(adapter);
 
     }
 
@@ -155,7 +179,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 {
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(lat, lng)));
-                    Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
+                   // Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
                 }
             }
         });
@@ -164,12 +188,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         if(googleMap != null){
             LatLng googgleLocation = new LatLng(latitude, longitude);
             //googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));
-
         }
-
-
-
-
     }
 
     @Override

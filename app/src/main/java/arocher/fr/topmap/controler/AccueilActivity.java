@@ -84,7 +84,7 @@ public class AccueilActivity extends AppCompatActivity {
                 request.recevoirCoordonnee(new MyRequest.recevoirCoordonneeCallback() {
                     @Override
                     public void onSuccess(double lat, double lng, int nbPos) {
-                        Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
+
                     }
                 });
             }

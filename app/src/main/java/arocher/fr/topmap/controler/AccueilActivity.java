@@ -81,12 +81,7 @@ public class AccueilActivity extends AppCompatActivity {
         btn_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request.recevoirCoordonnee(new MyRequest.recevoirCoordonneeCallback() {
-                    @Override
-                    public void onSuccess(double lat, double lng, int nbPos) {
 
-                    }
-                });
             }
         });
 

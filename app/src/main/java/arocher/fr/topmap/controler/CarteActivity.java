@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -22,7 +24,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -57,30 +58,39 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carte);
 
+        sessionManager = new SessionManager(this);
+
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
-
-        spinner_groupe = (Spinner) findViewById(R.id.spinner_groupe);
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
 
-        sessionManager = new SessionManager(this);
-
+        // SPINNER CHOIX GROUPE ACTUEL
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groupeList);
+        spinner_groupe = (Spinner) findViewById(R.id.spinner_groupe);
         request.recupGroupe(new MyRequest.recupGroupeCallback() {
             @Override
             public void onSuccess(String nom, int nbGroupe) {
-
                 groupeList.add(nom);
-
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_groupe.setAdapter(adapter);
             }
-
         });
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groupeList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_groupe.setAdapter(adapter);
-
+        // SELECTION DU GROUPE
+        spinner_groupe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Object nom = parent.getItemAtPosition(position);
+                Log.d("APP", nom.toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
+
+
 
     @Override
     protected void onResume() {
@@ -184,7 +194,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
             }
         });
 
-        Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
         if(googleMap != null){
             LatLng googgleLocation = new LatLng(latitude, longitude);
             //googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));

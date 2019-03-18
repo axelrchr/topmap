@@ -192,7 +192,7 @@ public class MyRequest {
         void onError(String message);
     }
 
-    public void creerGroupe(final String nom, final CreerGroupeCallback callback)
+    public void creerGroupe(final String nom,final String id, final CreerGroupeCallback callback)
     {
         String url = "https://topmap.alwaysdata.net/creerGroupe.php";
 
@@ -229,6 +229,7 @@ public class MyRequest {
 
                 Map<String, String> map = new HashMap<>();
                 map.put("nom", nom);
+                map.put("id", id);
 
                 return map;
             }
@@ -316,7 +317,7 @@ public class MyRequest {
 
     public void recevoirCoordonnee(final String nom, final recevoirCoordonneeCallback callback)
     {
-        String url = "https://topmap.alwaysdata.net/recupPos2.php";
+        String url = "https://topmap.alwaysdata.net/recupPos.php";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

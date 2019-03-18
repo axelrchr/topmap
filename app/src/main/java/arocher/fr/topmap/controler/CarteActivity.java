@@ -87,7 +87,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 request.recevoirCoordonnee(nom.toString(), new MyRequest.recevoirCoordonneeCallback() {
                     @Override
                     public void onSuccess(double lat, double lng, String pseudo) {
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)));
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(pseudo));
                     }
                 });
                 NOM = nom.toString();

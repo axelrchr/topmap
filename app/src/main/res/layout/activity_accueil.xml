@@ -1,45 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controler.AccueilActivity"
-    android:orientation="vertical"
-    android:gravity="center">
-
-    <TextView
-        android:id="@+id/tv_mail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/btn_creerGroupe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/creerGroupe"
-        android:layout_marginTop="10dp"/>
-
-    <Button
-        android:id="@+id/btn_carte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/carte"
-        android:layout_marginTop="10dp"/>
+    tools:context=".controler.AccueilActivity">
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        android:layout_marginTop="10dp"/>
+        />
 
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"
-        android:layout_marginTop="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_creerGroupe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/creerGroupe"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"/>
+
+            <Button
+                android:id="@+id/btn_mes_groupes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/voir_mes_gorupes"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_carte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/carte"
+            android:layout_marginTop="10dp"/>
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="btn dev test" />
+
+    </LinearLayout>
+
+</RelativeLayout>

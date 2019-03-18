@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 
 import arocher.fr.topmap.R;
+import arocher.fr.topmap.SessionManager;
 import arocher.fr.topmap.VolleySingleton;
 import arocher.fr.topmap.myrequest.MyRequest;
 
@@ -24,6 +25,7 @@ public class CreerGroupeActivity extends AppCompatActivity {
     private ProgressBar pb_loader;
     private RequestQueue queue;
     private MyRequest request;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class CreerGroupeActivity extends AppCompatActivity {
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
+        sessionManager = new SessionManager(this);
 
         btn_creer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,11 +49,12 @@ public class CreerGroupeActivity extends AppCompatActivity {
                 pb_loader.setVisibility(View.VISIBLE);
                 String nom = til_groupeName.getEditText().getText().toString().trim();
                 if(nom.length() > 0) {
-                    request.creerGroupe(nom, new MyRequest.CreerGroupeCallback() {
+                    request.creerGroupe(nom, sessionManager.getId(), new MyRequest.CreerGroupeCallback() {
                         @Override
                         public void onSuccess(String message) {
                             pb_loader.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            finish();
                         }
 
                         @Override

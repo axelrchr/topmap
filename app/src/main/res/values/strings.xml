@@ -20,4 +20,5 @@
     <string name="creerGroupe">Creer un groupe</string>
     <string name="carte">Voir la carte</string>
     <string name="ajouter_au_groupe">Ajouter un membre au groupe</string>
+    <string name="voir_mes_gorupes">Voir mes groupes</string>
 </resources>

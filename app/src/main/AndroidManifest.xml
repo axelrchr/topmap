@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controler.CarteActivity"></activity>
+        <activity android:name=".controler.MesGroupesActivity"></activity>
+        <activity android:name=".controler.CarteActivity" />
         <activity android:name=".controler.CreerGroupeActivity" />
         <activity android:name=".controler.AccueilActivity" />
         <activity android:name=".controler.RegisterActivity" />
@@ -25,8 +26,9 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-                   android:value="AIzaSyAV26-vEkZd8JNaAxQ30kZSaUBXWUSwpVQ"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAV26-vEkZd8JNaAxQ30kZSaUBXWUSwpVQ" />
     </application>
 
 </manifest>

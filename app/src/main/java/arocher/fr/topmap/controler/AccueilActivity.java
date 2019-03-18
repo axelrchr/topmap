@@ -81,7 +81,12 @@ public class AccueilActivity extends AppCompatActivity {
         btn_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                request.maPos(sessionManager.getId(), new MyRequest.maPosCallback() {
+                    @Override
+                    public void onSuccess(double lat, double lng) {
+                        Log.d("APP", lat + " " + lng);
+                    }
+                });
             }
         });
 

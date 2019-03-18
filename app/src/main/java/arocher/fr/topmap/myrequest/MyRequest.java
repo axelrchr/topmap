@@ -131,9 +131,9 @@ public class MyRequest {
             @Override
             public void onResponse(String response)
             {
-                JSONObject json = null;
+                //JSONObject json = null;
                 try {
-                    json = new JSONObject(response);
+                    JSONObject json = new JSONObject(response);
                     Boolean error = json.getBoolean("error");
 
                     if(!error)
@@ -271,39 +271,7 @@ public class MyRequest {
         queue.add(request);
     }
 
-    public void recevoirCoordonnee(final recevoirCoordonneeCallback callback )
-    {
-        String url = "https://topmap.alwaysdata.net/recupPos.php";
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    int nbPos = 0;
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray latArray = jsonObject.getJSONArray("lat");
-                    JSONArray lngArray = jsonObject.getJSONArray("lng");
-                    for (int i = 0; i < latArray.length(); i++) {
-                        nbPos++;
-                        callback.onSuccess(Double.parseDouble((String) latArray.get(i)), Double.parseDouble((String) lngArray.get(i)), nbPos);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        queue.add(request);
-    }
-
-    public interface recevoirCoordonneeCallback
-    {
-        void onSuccess(double lat, double lng, int nbPos);
-    }
-
-    public void recupGroupe (final recupGroupeCallback callback)
+    public void recupGroupe (final String id,final recupGroupeCallback callback)
     {
         String url = "https://topmap.alwaysdata.net/recupGroupe.php";
 
@@ -328,7 +296,16 @@ public class MyRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
             }
-        });
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("id", id);
+                return map;
+            }
+        };
         queue.add(request);
     }
 
@@ -337,4 +314,83 @@ public class MyRequest {
         void onSuccess(String nom, int nbGroupe);
     }
 
+    public void recevoirCoordonnee(final String nom, final recevoirCoordonneeCallback callback)
+    {
+        String url = "https://topmap.alwaysdata.net/recupPos2.php";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    int nbPos = 0;
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray latArray = jsonObject.getJSONArray("lat");
+                    JSONArray lngArray = jsonObject.getJSONArray("lng");
+                    for (int i = 0; i < latArray.length(); i++) {
+                        nbPos++;
+                        callback.onSuccess(Double.parseDouble((String) latArray.get(i)), Double.parseDouble((String) lngArray.get(i)), nbPos);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        })
+        {
+            @Override
+            protected Map<String, String>getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("nom", nom);
+
+                return map ;
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface recevoirCoordonneeCallback
+    {
+        void onSuccess(double lat, double lng, int nbPos);
+    }
+
+    public void maPos(final String id, final maPosCallback callback)
+    {
+        String url = "https://topmap.alwaysdata.net/maPos.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String lat = jsonObject.getString("lat");
+                    String lng = jsonObject.getString("lng");
+                    callback.onSuccess(Double.parseDouble(lat), Double.parseDouble(lng));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("id", id);
+                return map;
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface maPosCallback
+    {
+        void onSuccess(double lat, double lng);
+    }
 }

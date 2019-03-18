@@ -46,6 +46,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private MyRequest request;
     private SessionManager sessionManager;
 
+    private String NOM = "";
 
     private final List groupeList = new ArrayList();
 // https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
@@ -69,7 +70,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         // SPINNER CHOIX GROUPE ACTUEL
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groupeList);
         spinner_groupe = (Spinner) findViewById(R.id.spinner_groupe);
-        request.recupGroupe(new MyRequest.recupGroupeCallback() {
+        request.recupGroupe(sessionManager.getId(),new MyRequest.recupGroupeCallback() {
             @Override
             public void onSuccess(String nom, int nbGroupe) {
                 groupeList.add(nom);
@@ -81,8 +82,17 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         spinner_groupe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Object nom = parent.getItemAtPosition(position);
-                Log.d("APP", nom.toString());
+                final Object nom = parent.getItemAtPosition(position);
+                googleMap.clear();
+                request.recevoirCoordonnee(nom.toString(), new MyRequest.recevoirCoordonneeCallback() {
+                    @Override
+                    public void onSuccess(double lat, double lng, int nbPos) {
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)));
+                        //Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
+                    }
+                });
+                NOM = nom.toString();
+                //Log.d("APP", NOM);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -155,50 +165,25 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 CarteActivity.this.googleMap = googleMap;
-                googleMap.moveCamera(CameraUpdateFactory.zoomBy( 40 ));
+                googleMap.moveCamera(CameraUpdateFactory.zoomBy( 50 ));
                 googleMap.setMyLocationEnabled( true );
             }
         });
-
-        request.recevoirCoordonnee(new MyRequest.recevoirCoordonneeCallback() {
+        // Récupération de la lat et lng dans la bd de l'utilisateur connecté pour centrer sur sa derniere pos
+        request.maPos(sessionManager.getId(), new MyRequest.maPosCallback() {
             @Override
-            public void onSuccess(double lat, double lng, int nbPos) {
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(lat, lng)));
+            public void onSuccess(double lat, double lng) {
+                LatLng googgleLocation = new LatLng(lat, lng);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));
             }
         });
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-
-        String lat =  Double.toString(latitude);
-        String lng =  Double.toString(longitude);
-
-        String id = sessionManager.getId();
-        request.envoyerCoordonnee(lat, lng, id);
-
-        googleMap.clear();
-
-        request.recevoirCoordonnee(new MyRequest.recevoirCoordonneeCallback() {
+        // Recupération des lat et lng des membre du groupe choisi pour placer les marqueurs
+        request.recevoirCoordonnee(NOM, new MyRequest.recevoirCoordonneeCallback() {
             @Override
             public void onSuccess(double lat, double lng, int nbPos) {
-                for(int i = 0; i < nbPos+1; i++)
-                {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(lat, lng)));
-                   // Log.d("APP", "CALLBACK : " + lat + " " + lng + " " + nbPos);
-                }
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(String.valueOf(nbPos)));
             }
         });
-
-        //Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
-        if(googleMap != null){
-            LatLng googgleLocation = new LatLng(latitude, longitude);
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(googgleLocation));
-        }
     }
 
     @Override
@@ -212,7 +197,28 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
+    public void onLocationChanged(Location location) {
+        // Récupération de la latitude et de la longitude grace à Location
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        String lat =  Double.toString(latitude);
+        String lng =  Double.toString(longitude);
+        String id = sessionManager.getId();
+        // Mise a jour des lat et lng dans la bd
+        request.envoyerCoordonnee(lat, lng, id);
+        // Effacage de tous les marqueur pour placer les nouveaux
+        googleMap.clear();
+        // Recupération des lat et lng des membre du groupe choisi pour placer les marqueurs
+        request.recevoirCoordonnee(NOM, new MyRequest.recevoirCoordonneeCallback() {
+            @Override
+            public void onSuccess(double lat, double lng, int nbPos) {
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(String.valueOf(nbPos)));
+            }
+        });
+        Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void onProviderDisabled(String provider) {
     }
 }

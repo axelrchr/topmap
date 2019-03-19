@@ -94,7 +94,13 @@ public class AccueilActivity extends AppCompatActivity {
         btn_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String nom = "Garorock";
+                request.recupMembres(nom, new MyRequest.recupMembresCallback() {
+                    @Override
+                    public void onSuccess(String pseudo, int nbGroupe) {
 
+                    }
+                });
             }
         });
 

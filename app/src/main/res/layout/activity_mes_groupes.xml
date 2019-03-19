@@ -4,12 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controler.MesGroupesActivity">
+    tools:context=".controler.MesGroupesActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mes groupes"
+        android:gravity="center"
+        android:textSize="50sp"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="24dp"/>
 
     <ListView
         android:id="@+id/lv_groupe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="170dp">
 
     </ListView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="24dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Membres :"
+        android:textSize="25sp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <ListView
+        android:id="@+id/lv_membres"
+        android:layout_width="match_parent"
+        android:layout_height="142dp">
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_ajouterMembres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ajouter_membre"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/btn_quitterGroupe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quitter_le_groupe"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+
+
+
+
 </LinearLayout>

@@ -21,4 +21,6 @@
     <string name="carte">Voir la carte</string>
     <string name="ajouter_au_groupe">Ajouter un membre au groupe</string>
     <string name="voir_mes_gorupes">Voir mes groupes</string>
+    <string name="ajouter_membre">Ajouter un membre</string>
+    <string name="quitter_le_groupe">Quitter le groupe</string>
 </resources>

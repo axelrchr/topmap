@@ -393,4 +393,85 @@ public class MyRequest {
     {
         void onSuccess(double lat, double lng);
     }
+
+    public void recupMembres (final String nom,final recupMembresCallback callback)
+    {
+        String url = "https://topmap.alwaysdata.net/membreGroupe.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    int nbMembres = 0;
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray membresArray = jsonObject.getJSONArray("pseudo");
+                    for (int i = 0; i < membresArray.length(); i++) {
+                        Log.d("APP", String.valueOf(membresArray.get(i)) + " " + nbMembres);
+                        callback.onSuccess(String.valueOf(membresArray.get(i)), nbMembres);
+                        nbMembres++;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("nom", nom);
+                return map;
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface recupMembresCallback
+    {
+        void onSuccess(String pseudo, int nbGroupe);
+    }
+
+    public void quitterGroupe (final String nom, final String id,final quitterGroupeCallback callback)
+    {
+        String url = "https://topmap.alwaysdata.net/quitterGroupe.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message = jsonObject.getString("message");
+                    callback.onSucces(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("nom", nom);
+                map.put("id", id);
+                return map;
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface quitterGroupeCallback
+    {
+        void onSucces(String message);
+    }
 }

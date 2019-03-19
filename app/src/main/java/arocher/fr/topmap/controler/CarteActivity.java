@@ -10,14 +10,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.android.volley.RequestQueue;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,10 +22,8 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import arocher.fr.topmap.R;
 import arocher.fr.topmap.SessionManager;
 import arocher.fr.topmap.VolleySingleton;
@@ -41,18 +36,11 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private static final int PERMS_CALL_ID = 1234;
     private LocationManager lm;
     private Spinner spinner_groupe;
-
-    private RequestQueue queue;
     private MyRequest request;
     private SessionManager sessionManager;
-
     private String NOM = "";
-
-    private final List groupeList = new ArrayList();
-// https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
-
-
-
+    private final List<String> groupeList = new ArrayList<>();
+    // https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +52,12 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
 
-        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
 
         // SPINNER CHOIX GROUPE ACTUEL
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groupeList);
-        spinner_groupe = (Spinner) findViewById(R.id.spinner_groupe);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groupeList);
+        spinner_groupe = findViewById(R.id.spinner_groupe);
         request.recupGroupe(sessionManager.getId(),new MyRequest.recupGroupeCallback() {
             @Override
             public void onSuccess(String nom, int nbGroupe) {
@@ -98,8 +86,6 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         });
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -107,7 +93,6 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     }
 
     private void checkPermissions(){
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {
@@ -116,32 +101,23 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
             }, PERMS_CALL_ID);
             return;
         }
-
         lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        {
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
         }
-
-        if(lm.isProviderEnabled(LocationManager.PASSIVE_PROVIDER))
-        {
+        if(lm.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
         }
-
-        if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-        {
+        if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
         }
-
         loadMap();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == PERMS_CALL_ID)
-        {
+        if(requestCode == PERMS_CALL_ID) {
             checkPermissions();
         }
     }
@@ -149,16 +125,13 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     @Override
     protected void onPause() {
         super.onPause();
-        if (lm != null)
-        {
+        if (lm != null) {
             lm.removeUpdates(this);
         }
-
     }
 
     @SuppressWarnings("MissingPermission")
-    private void loadMap()
-    {
+    private void loadMap() {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -186,12 +159,10 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
 
     @Override

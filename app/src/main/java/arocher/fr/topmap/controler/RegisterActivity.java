@@ -6,26 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.volley.RequestQueue;
-
-import org.w3c.dom.Text;
-
 import java.util.Map;
-
 import arocher.fr.topmap.R;
 import arocher.fr.topmap.VolleySingleton;
 import arocher.fr.topmap.myrequest.MyRequest;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private Button btn_retour, btn_send;
     private TextInputLayout til_name, til_firstname, til_dateNaiss, til_mail, til_tel, til_pseudo, til_password, til_password_verif;
     private ProgressBar pb_loader;
-    private RequestQueue queue;
     private MyRequest request;
 
     @Override
@@ -33,21 +25,18 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        btn_retour = (Button) findViewById(R.id.btn_retour);
-        btn_send = (Button) findViewById(R.id.btn_send);
+        Button btn_send = findViewById(R.id.btn_send);
+        til_name = findViewById(R.id.til_name);
+        til_firstname = findViewById(R.id.til_firstname);
+        til_dateNaiss = findViewById(R.id.til_dateNaiss);
+        til_mail = findViewById(R.id.til_mail);
+        til_tel = findViewById(R.id.til_tel);
+        til_pseudo = findViewById(R.id.til_pseudo);
+        til_password = findViewById(R.id.til_password);
+        til_password_verif = findViewById(R.id.til_password_verif);
+        pb_loader = findViewById(R.id.pb_loader);
 
-        til_name = (TextInputLayout) findViewById(R.id.til_name);
-        til_firstname = (TextInputLayout) findViewById(R.id.til_firstname);
-        til_dateNaiss = (TextInputLayout) findViewById(R.id.til_dateNaiss);
-        til_mail = (TextInputLayout) findViewById(R.id.til_mail);
-        til_tel = (TextInputLayout) findViewById(R.id.til_tel);
-        til_pseudo = (TextInputLayout) findViewById(R.id.til_pseudo);
-        til_password = (TextInputLayout) findViewById(R.id.til_password);
-        til_password_verif = (TextInputLayout) findViewById(R.id.til_password_verif);
-
-        pb_loader = (ProgressBar) findViewById(R.id.pb_loader);
-
-        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
 
         btn_send.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }
-
                         @Override
                         public void inputErrors(Map<String, String> errors) {
                             pb_loader.setVisibility(View.GONE);
@@ -119,9 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 til_password.setErrorEnabled(false);
                             }
-
                         }
-
                         @Override
                         public void onError(String message) {
                             pb_loader.setVisibility(View.GONE);
@@ -129,13 +115,11 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
                 }
-                else
-                {
+                else {
                     Toast.makeText(getApplicationContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
     public void retour(View view) { this.finish(); }
 }

@@ -2,22 +2,15 @@ package arocher.fr.topmap.controler;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.android.volley.RequestQueue;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import arocher.fr.topmap.R;
 import arocher.fr.topmap.SessionManager;
 import arocher.fr.topmap.VolleySingleton;
@@ -26,10 +19,7 @@ import arocher.fr.topmap.myrequest.MyRequest;
 public class MesGroupesActivity extends AppCompatActivity {
 
     private ListView lv_groupe, lv_membres;
-    private Button btn_ajouterMembres, btn_quitterGroupe;
     private String NOM = "";
-
-    private RequestQueue queue;
     private MyRequest request;
     private SessionManager sessionManager;
 
@@ -38,23 +28,20 @@ public class MesGroupesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_groupes);
 
-        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
 
         sessionManager = new SessionManager(this);
 
-        btn_ajouterMembres = (Button) findViewById(R.id.btn_ajouterMembres);
-        btn_quitterGroupe = (Button) findViewById(R.id.btn_quitterGroupe);
+        Button btn_ajouterMembres = findViewById(R.id.btn_ajouterMembres);
+        Button btn_quitterGroupe = findViewById(R.id.btn_quitterGroupe);
+        lv_groupe = findViewById(R.id.lv_groupe);
+        lv_membres = findViewById(R.id.lv_membres);
 
-        lv_groupe = (ListView) findViewById(R.id.lv_groupe);
-        lv_membres = (ListView) findViewById(R.id.lv_membres);
-
-        final List<String> groupeListe = new ArrayList<String>();
-        final ArrayAdapter<String> groupeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, groupeListe);
-
-        final List<String> membreListe = new ArrayList<String>();
-        final ArrayAdapter<String> membreAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, membreListe);
-
+        final List<String> groupeListe = new ArrayList<>();
+        final ArrayAdapter<String> groupeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, groupeListe);
+        final List<String> membreListe = new ArrayList<>();
+        final ArrayAdapter<String> membreAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, membreListe);
 
         request.recupGroupe(sessionManager.getId(), new MyRequest.recupGroupeCallback() {
             @Override
@@ -65,7 +52,6 @@ public class MesGroupesActivity extends AppCompatActivity {
         });
 
         lv_groupe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 membreListe.clear();

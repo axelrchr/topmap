@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,8 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btn_retour"
@@ -23,8 +21,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/retour"
                 android:layout_marginBottom="20dp"
-                android:onClick="retour"
-                />
+                android:onClick="retour"/>
 
             <TextView
                 android:id="@+id/create_acount_tv1"
@@ -32,26 +29,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Créer un nouveau groupe"
-                tools:ignore="HardcodedText"
-                />
+                tools:ignore="HardcodedText"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_groupeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="70dp"
-                android:layout_marginTop="20dp"
-                >
+                android:layout_marginTop="20dp">
+
                 <EditText
                     android:id="@+id/input_groupeName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/groupeName"
                     android:inputType="text"
-                    android:textSize="15sp"
-                    />
-            </android.support.design.widget.TextInputLayout>
+                    android:textSize="15sp"/>
 
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/btn_creer"
@@ -60,8 +55,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:text="Creer le groupe"
-                tools:ignore="HardcodedText"
-                />
+                tools:ignore="HardcodedText"/>
 
             <ProgressBar
                 android:id="@+id/pb_loader"
@@ -69,8 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:visibility="invisible"
-                android:layout_marginTop="10dp"
-                />
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
     </ScrollView>

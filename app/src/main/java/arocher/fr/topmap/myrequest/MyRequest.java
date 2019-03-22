@@ -24,6 +24,19 @@ public class MyRequest {
         this.queue = queue;
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de créer un compte
+     * Les paramètres sont récupérés de l'activity RegisterActivity dans laquelle est appelée cette fonction
+     * @param name : Nom de l'utilisateur
+     * @param firstname : Prénom de l'utilisateur
+     * @param dateNaiss : Date de naissance de l'utilisateur
+     * @param mail : Adresse mail de l'utilisateur
+     * @param tel : Numéro de téléphone de l'utilisateur
+     * @param pseudo : Pseudo de l'utilisateur
+     * @param password : Mot de passe de l'utilisateur
+     * @param passwordVerif : Vérification du mot de passe, doit être identique au mot de passe
+     * @param callback Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void register(final String name, final String firstname, final String dateNaiss, final String mail, final String tel, final String pseudo, final String password, final String passwordVerif, final RegisterCallback callback) {
         String url = "https://topmap.alwaysdata.net/register.php";
 
@@ -95,11 +108,32 @@ public class MyRequest {
     }
 
     public interface RegisterCallback{
+        /**
+         * Si le script retourne error = false
+         * @param message : Retourne le message "Inscription réussie"
+         */
         void onSuccess(String message);
+
+        /** Si le script retourne error = true
+         * @param errors : Retourne une map qui contient un message d'erreur en fonction du champs ou se trouve l'erreur
+         *               exemple : "Ce pseudo est déjà utilisé"
+         */
         void inputErrors(Map<String, String>errors);
+
+        /** Dans le cas ou l'erreur provient de Volley
+         * @param message :Affiche un message en fonction de l'erreur
+         *                exemple : "Connexion au réseau impossible"
+         */
         void onError(String message);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de se connecter
+     * Les paramètres sont récupérés de l'activity ConnexionActivity dans laquelle est appelée cette fonction
+     * @param mail : Adresse mail de l'utilisateur
+     * @param password : Mot de passe de l'utilisateur
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void connexion(final String mail, final String password, final LoginCallback callback) {
         String url = "https://topmap.alwaysdata.net/login.php";
 
@@ -147,10 +181,30 @@ public class MyRequest {
     }
 
     public interface LoginCallback {
+        /**
+         * Si le script retourne error = false
+         * Retourne l'ID, le mail et le pseudo de l'utilisateur
+         * @param id : ID de l'utilisateur dans la base de données
+         * @param mail : Mail de l'utilisateur
+         * @param pseudo : Pseudo de l'utilisateur
+         */
         void onSuccess(String id, String mail, String pseudo);
+
+        /**
+         * Dans le cas ou l'erreur provient de Volley
+         * @param message : Affiche un message en fonction de l'erreur
+         *                exemple : "Connexion au réseau impossible"
+         */
         void onError(String message);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de se créer un groupe
+     * Les paramètres sont récupérés de l'activity CreerGroupeActivity dans laquelle est appelée cette fonction
+     * @param nom : Nom du groupe choisi par l'utilisateur
+     * @param id : ID de l'utilisateur
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void creerGroupe(final String nom,final String id, final CreerGroupeCallback callback) {
         String url = "https://topmap.alwaysdata.net/creerGroupe.php";
 
@@ -189,10 +243,28 @@ public class MyRequest {
     }
 
     public interface CreerGroupeCallback{
+        /**
+         * Si le script retourne error = false
+         * @param message : Retourne le message "Groupe créer avec succès"
+         */
         void onSuccess(String message);
+
+        /**
+         * Dans le cas ou l'erreur provient de Volley
+         * @param message : Affiche un message en fonction de l'erreur
+         *                 exemple : "Connexion au réseau impossible"
+         */
         void onError(String message);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet d'envoyer ses coordonées
+     * actuelles à la base de données
+     * Les paramètres sont récupérés de l'activity CarteActivity dans laquelle est appelée cette fonction
+     * @param lat : Latitude actuelle (coordonnée GPS)
+     * @param lng : Longitude actuelle (coordonnée GPS)
+     * @param id : ID de l'utilisateur
+     */
     public void envoyerCoordonnee(final String lat, final String lng, final String id) {
         String url = "https://topmap.alwaysdata.net/position.php";
 
@@ -217,6 +289,13 @@ public class MyRequest {
         queue.add(request);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de récupérer la liste des
+     * nom de groupe dans lesquels se trouve actuellement l'utilisateur
+     * Les paramètres sont récupérés des activity CarteActivity et MesGroupesActivity dans lesquelles sont appelée cette fonction
+     * @param id : ID de l'utilisateur
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void recupGroupe (final String id,final recupGroupeCallback callback) {
         String url = "https://topmap.alwaysdata.net/recupGroupe.php";
 
@@ -251,9 +330,23 @@ public class MyRequest {
     }
 
     public interface recupGroupeCallback {
+        /**
+         * Si le script retourne error = false
+         * Dans la fonction on parcours tous les noms de groupe trouvé, a chaque itération la fonction callback retourne
+         * le nom du groupe et son numéro dans la lise
+         * @param nom : Nom du groupe
+         * @param nbGroupe : Nombre de groupe
+         */
         void onSuccess(String nom, int nbGroupe);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de récupérer les coordonées
+     * GPS de tous les membres d'un groupe
+     * Les paramètres sont récupérés de l'activity CarteActivity dans laquelle est appelée cette fonction
+     * @param nom : Nom du groupe
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void recevoirCoordonnee(final String nom, final recevoirCoordonneeCallback callback) {
         String url = "https://topmap.alwaysdata.net/recupPos.php";
 
@@ -288,9 +381,24 @@ public class MyRequest {
     }
 
     public interface recevoirCoordonneeCallback {
+        /**
+         * Si le script retourne error = false
+         * Dans la fonction on parcours tous les couples lat/lng trouvés, a chaque itération la fonction callback retourne
+         * la latitude, la longitude et le pseudo correspondant
+         * @param lat : Latitude (coordonnée GPS)
+         * @param lng : Longitude (coordonnée GPS)
+         * @param pseudo : Pseudo de l'utilisateur correspondant a lat et lng
+         */
         void onSuccess(double lat, double lng, String pseudo);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de récupérer ses coordonées
+     * actuelles dans la base de donnée
+     * Les paramètres sont récupérés de l'activity CarteActivity dans laquelle est appelée cette fonction
+     * @param id : ID de l'utilisateur
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void maPos(final String id, final maPosCallback callback) {
         String url = "https://topmap.alwaysdata.net/maPos.php";
 
@@ -322,9 +430,22 @@ public class MyRequest {
     }
 
     public interface maPosCallback {
+        /**
+         * Si le script retourne error = false
+         * Retourne la latitude et longitude récupéré dans le script
+         * @param lat : Latitude (coordonnée GPS)
+         * @param lng : Longitude (coordonnée GPS)
+         */
         void onSuccess(double lat, double lng);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de récupérer les pseudos des
+     * membres d'un groupe
+     * Les paramètres sont récupérés de l'activity MesGroupesActivity dans laquelle est appelée cette fonction
+     * @param nom : Nom du groupe
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void recupMembres (final String nom,final recupMembresCallback callback) {
         String url = "https://topmap.alwaysdata.net/membreGroupe.php";
 
@@ -360,9 +481,24 @@ public class MyRequest {
     }
 
     public interface recupMembresCallback {
-        void onSuccess(String pseudo, int nbGroupe);
+        /**
+         * Si le script retourne error = false
+         * Dans la fonction on parcours tous les pseudo trouvé, a chaque itération la fonction callback retourne
+         * le pseudo et son numéro dans la liste
+         * @param pseudo : Pseudo des membres du groupe
+         * @param nbMembres : Nombre de membre
+         */
+        void onSuccess(String pseudo, int nbMembres);
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet de quitter un groupe
+     * Si l'utilisateur qui quitte le groupe était la derniere personne dedans alors ça supprime le groupe
+     * Les paramètres sont récupérés de l'activity MesGroupesActivity dans laquelle est appelée cette fonction
+     * @param nom : Nom du groupe
+     * @param id : ID de l'utilisateur
+     * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
+     */
     public void quitterGroupe (final String nom, final String id,final quitterGroupeCallback callback) {
         String url = "https://topmap.alwaysdata.net/quitterGroupe.php";
 
@@ -394,6 +530,11 @@ public class MyRequest {
     }
 
     public interface quitterGroupeCallback {
+        /**
+         * Si le script retourne error = false
+         * @param message : Si le groupe est supprimé le message sera : "Groupe supprimé"
+         *                sinon : "Groupe quitté"
+         */
         void onSucces(String message);
     }
 }

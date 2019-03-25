@@ -42,6 +42,10 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private final List<String> groupeList = new ArrayList<>();
     // https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

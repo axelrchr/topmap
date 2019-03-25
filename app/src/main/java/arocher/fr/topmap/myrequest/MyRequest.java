@@ -2,6 +2,8 @@ package arocher.fr.topmap.myrequest;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.RelativeLayout;
+
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -457,7 +459,6 @@ public class MyRequest {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray membresArray = jsonObject.getJSONArray("pseudo");
                     for (int i = 0; i < membresArray.length(); i++) {
-                        Log.d("APP", String.valueOf(membresArray.get(i)) + " " + nbMembres);
                         callback.onSuccess(String.valueOf(membresArray.get(i)), nbMembres);
                         nbMembres++;
                     }
@@ -537,4 +538,61 @@ public class MyRequest {
          */
         void onSucces(String message);
     }
+
+    public void ajouterMembre(final String pseudo, final String nom, final ajouterMembreCallback callback){
+        String url = "https://topmap.alwaysdata.net/ajouterMembre.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.d("APP", String.valueOf(jsonObject));
+                    String message = jsonObject.getString("message");
+                    boolean error = jsonObject.getBoolean("error");
+                    if(!error)
+                    {
+                        callback.onSuccess(message);
+                    }
+                    else
+                    {
+                        callback.onError(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> map = new HashMap<>();
+                map.put("pseudo", pseudo);
+                map.put("nom", nom);
+                Log.d("APP", String.valueOf(map));
+                return map;
+
+            }
+        };
+        queue.add(request);
+
+    }
+
+    public interface ajouterMembreCallback{
+        /**
+         * Si le script retourne error = false
+         * @param message : Affiche le message " 'pseudo' a été ajouté au groupe 'groupe' "
+         */
+        void onSuccess(String message);
+
+        /**
+         * Si le script retourne error = true car l'erreur vient de la saisie du pseudo
+         * @param message : Affiche le message "Ce pseudo n'existe pas"
+         */
+        void onError(String message);
+    }
 }
+

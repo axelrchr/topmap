@@ -182,6 +182,10 @@ public class MesGroupesActivity extends AppCompatActivity {
                                 }
                             });
                         }
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
                     });
                 }
             });

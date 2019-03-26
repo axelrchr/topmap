@@ -216,8 +216,13 @@ public class MyRequest {
                 try {
                     JSONObject json = new JSONObject(response);
                     boolean error = json.getBoolean("error");
+                    String message = json.getString("message");
                     if(!error){
-                        callback.onSuccess("Groupe créée avec succès");
+                        callback.onSuccess(message);
+                    }
+                    else
+                    {
+                        callback.onError(message);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -509,7 +514,12 @@ public class MyRequest {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String message = jsonObject.getString("message");
-                    callback.onSucces(message);
+                    boolean error = jsonObject.getBoolean("error");
+                    if(!error) {
+                        callback.onSucces(message);
+                    }else{
+                        callback.onError(message);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -537,8 +547,17 @@ public class MyRequest {
          *                sinon : "Groupe quitté"
          */
         void onSucces(String message);
+        void onError(String message);
+
     }
 
+    /**
+     * Fonction dans laquelle se trouve le lien vers le script php ou se trouve la requête qui permet d'ajouter un membre dans un groupe
+     * Les paramètres sont récupérés de l'activity MesGroupesActivity dans laquelle est appelée cette fonction
+     * @param pseudo : Pseudo de l'utilisateur qui va être ajouté au groupe
+     * @param nom : Nom du groupe dans lequel l'utilisateur veut ajouter un membre
+     * @param callback : Interface qui retourne si la requete a connu des erreurs ou non
+     */
     public void ajouterMembre(final String pseudo, final String nom, final ajouterMembreCallback callback){
         String url = "https://topmap.alwaysdata.net/ajouterMembre.php";
 

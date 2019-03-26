@@ -25,12 +25,12 @@ public class MesGroupesActivity extends AppCompatActivity {
     // DECLARATION DES VARIABLES
 
         private ListView lv_groupe, lv_membres;
-        private String NOM = "";
+        private String NOM;
+        private String PSEUDO;
+        private String pseudoAmi, nomGroupe;
         private MyRequest request;
         private SessionManager sessionManager;
         private EditText inputGroupe, inputPseudo;
-        private String pseudoAmi;
-        private String nomGroupe;
 
     /**
      * Constructeur appellé au lancement de l'activity
@@ -50,6 +50,7 @@ public class MesGroupesActivity extends AppCompatActivity {
             Button btn_ajouterMembres = findViewById(R.id.btn_ajouterMembres);
             Button btn_creerGroupe = findViewById(R.id.btn_creerGroupe);
             Button btn_quitterGroupe = findViewById(R.id.btn_quitterGroupe);
+            Button btn_supprimerMembre = findViewById(R.id.btn_supprimerMembre);
             // Récupération des ListView du xml
             lv_groupe = findViewById(R.id.lv_groupe);
             lv_membres = findViewById(R.id.lv_membres);
@@ -93,6 +94,15 @@ public class MesGroupesActivity extends AppCompatActivity {
                 }
             });
 
+            // Récupération du pseudo du membre selectionné
+            lv_membres.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Object pseudo = parent.getItemAtPosition(position);
+                    PSEUDO = pseudo.toString();
+                }
+            });
+
         // INITIALISATION ET CREATION DES BOITES DE DIALOGUE
 
             // CREATION DE LA BOITE DE DIALOGUE POUR SAISIR UN PSEUDO
@@ -111,7 +121,6 @@ public class MesGroupesActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             membreListe.add(pseudoAmi);
                             lv_membres.setAdapter(membreAdapter);
-                            Log.d("APP", pseudoAmi);
                         }
 
                         @Override
@@ -162,7 +171,7 @@ public class MesGroupesActivity extends AppCompatActivity {
 
             // CREATION DE LA BOITE DE DIALOGUE POUR DEMANDER CONFIRMATION AVANT DE QUITTER UN GROUPE
             AlertDialog.Builder builderConfirmationQuitterGroupe = new AlertDialog.Builder(this);
-            builderConfirmationQuitterGroupe.setTitle("Voulez vous vraiment quitter " + NOM + " ?");
+            builderConfirmationQuitterGroupe.setTitle("Voulez vous vraiment quitter le groupe selectionné ?");
             builderConfirmationQuitterGroupe.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -197,6 +206,54 @@ public class MesGroupesActivity extends AppCompatActivity {
             });
             final AlertDialog confirmationQuitterGroupe = builderConfirmationQuitterGroupe.create();
 
+
+
+
+
+        // CREATION DE LA BOITE DE DIALOGUE POUR DEMANDER CONFIRMATION AVANT DE SUPPRESSION DU MEMBRE
+        AlertDialog.Builder builderConfirmationSupprMembre = new AlertDialog.Builder(this);
+        builderConfirmationSupprMembre.setTitle("Voulez vous vraiment supprimer l'utilisateur selectionné ?");
+        builderConfirmationSupprMembre.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                request.supprimerMembre(PSEUDO, NOM, new MyRequest.supprimerMembreCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        membreListe.clear();
+                        lv_membres.setAdapter(null);
+                        request.recupMembres(NOM, new MyRequest.recupMembresCallback() {
+                            @Override
+                            public void onSuccess(String pseudo, int nbMembres) {
+                                membreListe.add(pseudo);
+                                lv_membres.setAdapter(membreAdapter);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+        builderConfirmationSupprMembre.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog confirmationSupprMembre = builderConfirmationSupprMembre.create();
+
+
+
+
+
+
+
+
         // COMPORTEMENT ASSOCIE AUX BOUTONS
 
             // Bouton quitter groupe
@@ -224,6 +281,14 @@ public class MesGroupesActivity extends AppCompatActivity {
             });
 
             // Bouton supprimer membre
+        btn_supprimerMembre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("APP", PSEUDO + " " + NOM);
+                confirmationSupprMembre.show();
+            }
+        });
+
     }
 
 

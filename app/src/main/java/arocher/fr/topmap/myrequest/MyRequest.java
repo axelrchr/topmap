@@ -566,7 +566,6 @@ public class MyRequest {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Log.d("APP", String.valueOf(jsonObject));
                     String message = jsonObject.getString("message");
                     boolean error = jsonObject.getBoolean("error");
                     if(!error)
@@ -611,6 +610,52 @@ public class MyRequest {
          * Si le script retourne error = true car l'erreur vient de la saisie du pseudo
          * @param message : Affiche le message "Ce pseudo n'existe pas"
          */
+        void onError(String message);
+    }
+
+    public void supprimerMembre(final String pseudo,final String nomGroupe,final supprimerMembreCallback callback){
+        String url = "https://topmap.alwaysdata.net/supprimerMembre.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message = jsonObject.getString("message");
+                    boolean error = jsonObject.getBoolean("error");
+                    Log.d("APP", String.valueOf(jsonObject));
+                    if(!error)
+                    {
+                        callback.onSuccess(message);
+                    }
+                    else
+                    {
+                        callback.onError(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> map = new HashMap<>();
+                map.put("pseudo", pseudo);
+                map.put("nomGroupe", nomGroupe);
+                Log.d("APP", String.valueOf(map));
+                return map;
+
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface supprimerMembreCallback{
+        void onSuccess(String message);
         void onError(String message);
     }
 }

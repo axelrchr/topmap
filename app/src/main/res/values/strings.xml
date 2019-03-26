@@ -23,4 +23,6 @@
     <string name="voir_mes_gorupes">Voir mes groupes</string>
     <string name="ajouter_membre">Ajouter un membre</string>
     <string name="quitter_le_groupe">Quitter le groupe</string>
+    <string name="supprimer_du_groupe">Supprimer du groupe</string>
+    <string name="supprimer_le_membre">Supprimer le membre</string>
 </resources>

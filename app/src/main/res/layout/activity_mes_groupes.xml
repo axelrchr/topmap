@@ -56,14 +56,17 @@
 
         <Button
             android:id="@+id/btn_ajouterMembres"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/ajouter_membre"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/btn_quitterGroupe"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/quitter_le_groupe"
             android:textSize="15sp"/>
@@ -78,19 +81,23 @@
 
         <Button
             android:id="@+id/btn_creerGroupe"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/creerGroupe"
             android:textSize="15sp"
-
             />
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
         <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_supprimerMembre"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="en attente"
+            android:text="@string/supprimer_le_membre"
             android:textSize="15sp"
-            android:layout_marginRight="20dp"/>
+            />
 
 
 

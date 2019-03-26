@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class MesGroupesActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private EditText input;
     private String pseudoAmi;
+    private String nomGroupe;
 
     /**
      * Constructeur appellé au lancement de l'activity
@@ -40,6 +42,12 @@ public class MesGroupesActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_groupes);
+
+        final Button btn_ajouterMembres = findViewById(R.id.btn_ajouterMembres);
+        final Button btn_creerGroupe = findViewById(R.id.btn_creerGroupe);
+        Button btn_quitterGroupe = findViewById(R.id.btn_quitterGroupe);
+        lv_groupe = findViewById(R.id.lv_groupe);
+        lv_membres = findViewById(R.id.lv_membres);
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
@@ -52,11 +60,11 @@ public class MesGroupesActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         // CREATION DE LA BOITE DE DIALOGUE POUR SAISIR UN PSEUDO
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajouter un membre");
+        AlertDialog.Builder builderMembre = new AlertDialog.Builder(this);
+        builderMembre.setTitle("Ajouter un membre");
         input = new EditText(this);
-        builder.setView(input);
-        builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+        builderMembre.setView(input);
+        builderMembre.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 pseudoAmi = input.getText().toString();
@@ -75,19 +83,45 @@ public class MesGroupesActivity extends AppCompatActivity {
                 });
             }
         });
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+        builderMembre.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-        final AlertDialog ad = builder.create();
-        final Button btn_ajouterMembres = findViewById(R.id.btn_ajouterMembres);
+        final AlertDialog ajoutMembre = builderMembre.create();
 
-        Button btn_quitterGroupe = findViewById(R.id.btn_quitterGroupe);
-        lv_groupe = findViewById(R.id.lv_groupe);
-        lv_membres = findViewById(R.id.lv_membres);
+        // CREATION DE LA BOITE DE DIALOGUE POUR SAISIR UN GROUPE
+        AlertDialog.Builder builderGroupe = new AlertDialog.Builder(this);
+        builderGroupe.setTitle("Creer un groupe");
+        input = new EditText(this);
+        builderGroupe.setView(input);
+        builderGroupe.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                nomGroupe = input.getText().toString();
+                request.creerGroupe(nomGroupe, sessionManager.getId(), new MyRequest.CreerGroupeCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        groupeListe.add(nomGroupe);
+                        lv_groupe.setAdapter(groupeAdapter);
+                    }
 
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        builderGroupe.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog ajoutGroupe = builderGroupe.create();
 
 
         request.recupGroupe(sessionManager.getId(), new MyRequest.recupGroupeCallback() {
@@ -142,10 +176,20 @@ public class MesGroupesActivity extends AppCompatActivity {
         btn_ajouterMembres.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ad.show();
+                ajoutMembre.show();
+            }
+        });
+
+        btn_creerGroupe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ajoutGroupe.show();
             }
         });
     }
+
+
+
 
 
 }

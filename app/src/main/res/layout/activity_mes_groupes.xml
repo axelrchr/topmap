@@ -71,6 +71,10 @@
             android:text="@string/quitter_le_groupe"
             android:textSize="15sp"/>
 
+
+
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -80,6 +84,18 @@
         android:gravity="center">
 
         <Button
+            android:id="@+id/btn_supprimerMembre"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/supprimer_le_membre"
+            android:textSize="15sp"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+        
+        <Button
             android:id="@+id/btn_creerGroupe"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -87,17 +103,9 @@
             android:textSize="15sp"
             />
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="match_parent" />
 
-        <Button
-            android:id="@+id/btn_supprimerMembre"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="@string/supprimer_le_membre"
-            android:textSize="15sp"
-            />
+
+
 
 
 

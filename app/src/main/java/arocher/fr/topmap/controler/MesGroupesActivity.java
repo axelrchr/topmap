@@ -2,6 +2,8 @@ package arocher.fr.topmap.controler;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,8 @@ public class MesGroupesActivity extends AppCompatActivity {
         private MyRequest request;
         private SessionManager sessionManager;
         private EditText inputGroupe, inputPseudo;
+        private View LASTVIEW;
+
 
     /**
      * Constructeur appellé au lancement de l'activity
@@ -80,6 +84,10 @@ public class MesGroupesActivity extends AppCompatActivity {
             lv_groupe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(LASTVIEW != null)
+                    {
+                        LASTVIEW.setBackgroundColor(Color.BLACK);
+                    }
                     membreListe.clear();
                     lv_membres.setAdapter(null);
                     Object nom = parent.getItemAtPosition(position);
@@ -91,6 +99,9 @@ public class MesGroupesActivity extends AppCompatActivity {
                             lv_membres.setAdapter(membreAdapter);
                         }
                     });
+
+                    view.setBackgroundColor(Color.GRAY);
+                    LASTVIEW = view;
                 }
             });
 
@@ -206,10 +217,6 @@ public class MesGroupesActivity extends AppCompatActivity {
             });
             final AlertDialog confirmationQuitterGroupe = builderConfirmationQuitterGroupe.create();
 
-
-
-
-
         // CREATION DE LA BOITE DE DIALOGUE POUR DEMANDER CONFIRMATION AVANT DE SUPPRESSION DU MEMBRE
         AlertDialog.Builder builderConfirmationSupprMembre = new AlertDialog.Builder(this);
         builderConfirmationSupprMembre.setTitle("Voulez vous vraiment supprimer l'utilisateur selectionné ?");
@@ -247,13 +254,6 @@ public class MesGroupesActivity extends AppCompatActivity {
         });
         final AlertDialog confirmationSupprMembre = builderConfirmationSupprMembre.create();
 
-
-
-
-
-
-
-
         // COMPORTEMENT ASSOCIE AUX BOUTONS
 
             // Bouton quitter groupe
@@ -290,12 +290,9 @@ public class MesGroupesActivity extends AppCompatActivity {
         });
 
     }
-
-
-
-
-
 }
+
+
 
 
 

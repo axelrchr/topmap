@@ -3,7 +3,6 @@ package arocher.fr.topmap.controler;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +32,7 @@ public class MesGroupesActivity extends AppCompatActivity {
         private MyRequest request;
         private SessionManager sessionManager;
         private EditText inputGroupe, inputPseudo;
-        private View LASTVIEW;
+        private View LASTVIEWGROUPE, LASTVIEWMEMBRE;
 
 
     /**
@@ -84,9 +83,8 @@ public class MesGroupesActivity extends AppCompatActivity {
             lv_groupe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(LASTVIEW != null)
-                    {
-                        LASTVIEW.setBackgroundColor(Color.BLACK);
+                    if(LASTVIEWGROUPE != null) {
+                        LASTVIEWGROUPE.setBackgroundColor(Color.rgb(247, 247, 247));
                     }
                     membreListe.clear();
                     lv_membres.setAdapter(null);
@@ -100,8 +98,8 @@ public class MesGroupesActivity extends AppCompatActivity {
                         }
                     });
 
-                    view.setBackgroundColor(Color.GRAY);
-                    LASTVIEW = view;
+                    view.setBackgroundColor(Color.LTGRAY);
+                    LASTVIEWGROUPE = view;
                 }
             });
 
@@ -109,8 +107,13 @@ public class MesGroupesActivity extends AppCompatActivity {
             lv_membres.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(LASTVIEWMEMBRE != null) {
+                        LASTVIEWMEMBRE.setBackgroundColor(Color.rgb(247, 247, 247));
+                    }
                     Object pseudo = parent.getItemAtPosition(position);
                     PSEUDO = pseudo.toString();
+                    view.setBackgroundColor(Color.LTGRAY);
+                    LASTVIEWMEMBRE = view;
                 }
             });
 
@@ -243,7 +246,6 @@ public class MesGroupesActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     }
                 });
-
             }
         });
         builderConfirmationSupprMembre.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {

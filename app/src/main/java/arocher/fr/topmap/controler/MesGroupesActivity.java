@@ -50,10 +50,10 @@ public class MesGroupesActivity extends AppCompatActivity {
             sessionManager = new SessionManager(this);
 
             // Récupération des boutons du xml
-            Button btn_ajouterMembres = findViewById(R.id.btn_ajouterMembres);
+            final Button btn_ajouterMembres = findViewById(R.id.btn_ajouterMembres);
             Button btn_creerGroupe = findViewById(R.id.btn_creerGroupe);
-            Button btn_quitterGroupe = findViewById(R.id.btn_quitterGroupe);
-            Button btn_supprimerMembre = findViewById(R.id.btn_supprimerMembre);
+            final Button btn_quitterGroupe = findViewById(R.id.btn_quitterGroupe);
+            final Button btn_supprimerMembre = findViewById(R.id.btn_supprimerMembre);
             // Récupération des ListView du xml
             lv_groupe = findViewById(R.id.lv_groupe);
             lv_membres = findViewById(R.id.lv_membres);
@@ -61,6 +61,11 @@ public class MesGroupesActivity extends AppCompatActivity {
             // Initialisation de queue et request pour les requetes
             RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
             request = new MyRequest(this, queue);
+
+            // Initialisation des boutons non dispo
+            btn_ajouterMembres.setEnabled(false);
+            btn_supprimerMembre.setEnabled(false);
+            btn_quitterGroupe.setEnabled(false);
 
         // INITIALISATION, CREATION ET PEUPLEMENT DES LISTVIEW
 
@@ -77,6 +82,11 @@ public class MesGroupesActivity extends AppCompatActivity {
                     groupeListe.add(nom);
                     lv_groupe.setAdapter(groupeAdapter);
                 }
+
+                @Override
+                public void estVide() {
+                    btn_quitterGroupe.setEnabled(false);
+                }
             });
 
             // Récupération des membres du groupe selectionné dans lv_groupe pour peupler le ListView lv_membres
@@ -92,12 +102,25 @@ public class MesGroupesActivity extends AppCompatActivity {
                     NOM = nom.toString();
                     request.recupMembres(NOM, new MyRequest.recupMembresCallback() {
                         @Override
-                        public void onSuccess(String pseudo, int nbGroupe) {
-                            membreListe.add(pseudo);
+                        public void onSuccess(String pseudo, String estChef, int nbGroupe) {
+                            btn_quitterGroupe.setEnabled(true);
+                            if(estChef.equals("1")) {
+                                membreListe.add(pseudo + "   [Chef de groupe]");
+                                if(sessionManager.getPseudo().equals(pseudo)) {
+                                    btn_ajouterMembres.setEnabled(true);
+                                    btn_supprimerMembre.setEnabled(true);
+                                }
+                            }
+                            else{
+                                if(sessionManager.getPseudo().equals(pseudo)) {
+                                    btn_ajouterMembres.setEnabled(false);
+                                    btn_supprimerMembre.setEnabled(false);
+                                }
+                                membreListe.add(pseudo);
+                            }
                             lv_membres.setAdapter(membreAdapter);
                         }
                     });
-
                     view.setBackgroundColor(Color.LTGRAY);
                     LASTVIEWGROUPE = view;
                 }
@@ -203,6 +226,13 @@ public class MesGroupesActivity extends AppCompatActivity {
                                     groupeListe.add(nom);
                                     lv_groupe.setAdapter(groupeAdapter);
                                 }
+
+                                @Override
+                                public void estVide() {
+                                    btn_quitterGroupe.setEnabled(false);
+                                    btn_ajouterMembres.setEnabled(false);
+                                    btn_supprimerMembre.setEnabled(false);
+                                }
                             });
                         }
                         @Override
@@ -234,7 +264,7 @@ public class MesGroupesActivity extends AppCompatActivity {
                         lv_membres.setAdapter(null);
                         request.recupMembres(NOM, new MyRequest.recupMembresCallback() {
                             @Override
-                            public void onSuccess(String pseudo, int nbMembres) {
+                            public void onSuccess(String pseudo, String estChef, int nbMembres) {
                                 membreListe.add(pseudo);
                                 lv_membres.setAdapter(membreAdapter);
                             }
@@ -286,7 +316,6 @@ public class MesGroupesActivity extends AppCompatActivity {
         btn_supprimerMembre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("APP", PSEUDO + " " + NOM);
                 confirmationSupprMembre.show();
             }
         });

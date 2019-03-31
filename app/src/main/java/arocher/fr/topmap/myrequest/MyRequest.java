@@ -312,6 +312,10 @@ public class MyRequest {
                 try {
                     int nbGroupe = 0;
                     JSONObject jsonObject = new JSONObject(response);
+                    Log.d("APP", response);
+                    if(String.valueOf(response).equals("{\"nom\":null}")){
+                        callback.estVide();
+                    }
                     JSONArray nomArray = jsonObject.getJSONArray("nom");
                     for (int i = 0; i < nomArray.length(); i++) {
                         callback.onSuccess(String.valueOf(nomArray.get(i)), nbGroupe);
@@ -345,6 +349,7 @@ public class MyRequest {
          * @param nbGroupe : Nombre de groupe
          */
         void onSuccess(String nom, int nbGroupe);
+        void estVide();
     }
 
     /**
@@ -453,7 +458,7 @@ public class MyRequest {
      * @param nom : Nom du groupe
      * @param callback : Interface qui retourne si la requête a connu des erreurs ou non
      */
-    public void recupMembres (final String nom,final recupMembresCallback callback) {
+    public void recupMembres (final String nom, final recupMembresCallback callback) {
         String url = "https://topmap.alwaysdata.net/membreGroupe.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -463,8 +468,9 @@ public class MyRequest {
                     int nbMembres = 0;
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray membresArray = jsonObject.getJSONArray("pseudo");
+                    JSONArray estChefArray = jsonObject.getJSONArray("estChef");
                     for (int i = 0; i < membresArray.length(); i++) {
-                        callback.onSuccess(String.valueOf(membresArray.get(i)), nbMembres);
+                        callback.onSuccess(String.valueOf(membresArray.get(i)),String.valueOf(estChefArray.get(i)), nbMembres);
                         nbMembres++;
                     }
                 } catch (JSONException e) {
@@ -494,7 +500,7 @@ public class MyRequest {
          * @param pseudo : Pseudo des membres du groupe
          * @param nbMembres : Nombre de membre
          */
-        void onSuccess(String pseudo, int nbMembres);
+        void onSuccess(String pseudo, String estChef, int nbMembres);
     }
 
     /**

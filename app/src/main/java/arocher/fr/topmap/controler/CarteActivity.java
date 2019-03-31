@@ -69,6 +69,11 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_groupe.setAdapter(adapter);
             }
+
+            @Override
+            public void estVide() {
+                Toast.makeText(getApplicationContext(), "Vous n'êtes dans aucun groupe", Toast.LENGTH_SHORT).show();
+            }
         });
         // SELECTION DU GROUPE
         spinner_groupe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

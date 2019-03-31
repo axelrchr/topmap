@@ -705,6 +705,7 @@ public class MyRequest {
          * @param nbAmis : Nombre d'amis
          */
         void onSuccess(String pseudo, int nbAmis);
+        void estVide();
     }
 
     public void ajouterAmi(final String pseudo, final String id, final ajouterAmiCallback callback){

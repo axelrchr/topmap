@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import java.util.ArrayList;
@@ -28,11 +29,13 @@ public class MesGroupesActivity extends AppCompatActivity {
         private ListView lv_groupe, lv_membres;
         private String NOM;
         private String PSEUDO;
+        private String PSEUDOAMI;
         private String pseudoAmi, nomGroupe;
         private MyRequest request;
         private SessionManager sessionManager;
         private EditText inputGroupe, inputPseudo;
         private View LASTVIEWGROUPE, LASTVIEWMEMBRE;
+        private Spinner spinnerAmi;
 
 
     /**
@@ -69,7 +72,9 @@ public class MesGroupesActivity extends AppCompatActivity {
 
         // INITIALISATION, CREATION ET PEUPLEMENT DES LISTVIEW
 
-            // Déclaration et initialisation des Listes et des ArrayAdapter pour le contenu des ListView
+            // Déclaration et initialisation des Listes et des ArrayAdapter pour le contenu des ListView et spinner
+            final List<String> amiListe = new ArrayList<>();
+            final ArrayAdapter<String> amiAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, amiListe);
             final List<String> groupeListe = new ArrayList<>();
             final ArrayAdapter<String> groupeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, groupeListe);
             final List<String> membreListe = new ArrayList<>();
@@ -144,21 +149,41 @@ public class MesGroupesActivity extends AppCompatActivity {
 
             // CREATION DE LA BOITE DE DIALOGUE POUR SAISIR UN PSEUDO
             AlertDialog.Builder builderMembre = new AlertDialog.Builder(this);
-            builderMembre.setTitle("Ajouter un membre");
-            inputPseudo = new EditText(this);
-            builderMembre.setView(inputPseudo);
+            builderMembre.setTitle("Ajouter un membre depuis votre liste d'ami");
+            spinnerAmi = new Spinner(this);
+            request.recupAmis(sessionManager.getId(), new MyRequest.recupAmisCallback() {
+                @Override
+                public void onSuccess(String pseudo, int nbAmis) {
+                    amiListe.add(pseudo);
+                    amiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+                    spinnerAmi.setAdapter(amiAdapter);
+                    spinnerAmi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            final Object pseudo = parent.getItemAtPosition(position);
+                            PSEUDOAMI = String.valueOf(pseudo);
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                }
+                @Override
+                public void estVide() {
+                    spinnerAmi.setEnabled(false);
+                }
+            });
+            builderMembre.setView(spinnerAmi);
             builderMembre.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    pseudoAmi = inputPseudo.getText().toString();
-                    request.ajouterMembre(pseudoAmi, NOM, new MyRequest.ajouterMembreCallback() {
+                    request.ajouterMembre(PSEUDOAMI, NOM, new MyRequest.ajouterMembreCallback() {
                         @Override
                         public void onSuccess(String message) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            membreListe.add(pseudoAmi);
+                            membreListe.add(PSEUDOAMI);
                             lv_membres.setAdapter(membreAdapter);
                         }
-
                         @Override
                         public void onError(String message) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -220,14 +245,14 @@ public class MesGroupesActivity extends AppCompatActivity {
                             membreListe.clear();
                             lv_membres.setAdapter(null);
                             btn_quitterGroupe.setEnabled(false);
-
+                            btn_ajouterMembres.setEnabled(false);
+                            btn_supprimerMembre.setEnabled(false);
                             request.recupGroupe(sessionManager.getId(), new MyRequest.recupGroupeCallback() {
                                 @Override
                                 public void onSuccess(String nom, int nbGroupe) {
                                     groupeListe.add(nom);
                                     lv_groupe.setAdapter(groupeAdapter);
                                 }
-
                                 @Override
                                 public void estVide() {
                                 }
@@ -263,7 +288,11 @@ public class MesGroupesActivity extends AppCompatActivity {
                         request.recupMembres(NOM, new MyRequest.recupMembresCallback() {
                             @Override
                             public void onSuccess(String pseudo, String estChef, int nbMembres) {
-                                membreListe.add(pseudo);
+                                if(estChef.equals("1")) {
+                                    membreListe.add(pseudo + "   [Chef de groupe]");
+                                }else{
+                                    membreListe.add(pseudo);
+                                }
                                 lv_membres.setAdapter(membreAdapter);
                             }
                         });

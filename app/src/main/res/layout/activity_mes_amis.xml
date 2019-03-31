@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controler.MesGroupesActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mes amis"
+        android:gravity="center"
+        android:textSize="50sp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="24dp"/>
+
+    <ListView
+        android:id="@+id/lv_amis"
+        android:layout_width="match_parent"
+        android:layout_height="487dp">
+
+    </ListView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_ajouterAmi"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Ajouter"
+            android:textSize="15sp"
+            android:layout_gravity="bottom"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btn_supprimerAmi"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Supprimer"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+

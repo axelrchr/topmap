@@ -29,8 +29,8 @@ public class AccueilActivity extends AppCompatActivity {
         TextView tv2 = findViewById(R.id.tv2);
         Button btn_logout = findViewById(R.id.btn_logout);
         Button btn_carte = findViewById(R.id.btn_carte);
-        //Button btn_test = findViewById(R.id.btn_test);
         Button btn_mes_groupes = findViewById(R.id.btn_mes_groupes);
+        Button btn_amis = findViewById(R.id.btn_amis);
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new MyRequest(this, queue);
@@ -68,16 +68,12 @@ public class AccueilActivity extends AppCompatActivity {
             }
         });
 
-        /*btn_test.setOnClickListener(new View.OnClickListener() {
+        btn_amis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nom = "Garorock";
-                request.recupMembres(nom, new MyRequest.recupMembresCallback() {
-                    @Override
-                    public void onSuccess(String pseudo, int nbGroupe) {
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(), MesAmisActivity.class);
+                startActivity(intent);
             }
-        });*/
+        });
     }
 }

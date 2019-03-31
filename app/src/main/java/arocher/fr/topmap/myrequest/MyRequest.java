@@ -312,7 +312,6 @@ public class MyRequest {
                 try {
                     int nbGroupe = 0;
                     JSONObject jsonObject = new JSONObject(response);
-                    Log.d("APP", response);
                     if(String.valueOf(response).equals("{\"nom\":null}")){
                         callback.estVide();
                     }
@@ -596,7 +595,6 @@ public class MyRequest {
                 Map<String, String> map = new HashMap<>();
                 map.put("pseudo", pseudo);
                 map.put("nom", nom);
-                Log.d("APP", String.valueOf(map));
                 return map;
 
             }
@@ -661,6 +659,148 @@ public class MyRequest {
     }
 
     public interface supprimerMembreCallback{
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
+    public void recupAmis (final String id,final recupAmisCallback callback) {
+        String url = "https://topmap.alwaysdata.net/recupAmi.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    int nbAmis = 0;
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray pseudoArray = jsonObject.getJSONArray("pseudo");
+                    for (int i = 0; i < pseudoArray.length(); i++) {
+                        callback.onSuccess(String.valueOf(pseudoArray.get(i)), nbAmis);
+                        nbAmis++;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> map = new HashMap<>();
+                map.put("id", id);
+                return map;
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface recupAmisCallback {
+        /**
+         * Si le script retourne error = false
+         * Dans la fonction on parcours tous les pseudos des amis trouvés, a chaque itération la fonction callback retourne
+         * le pseudo et son numéro dans la lise
+         * @param pseudo : Pseudo de l'ami
+         * @param nbAmis : Nombre d'amis
+         */
+        void onSuccess(String pseudo, int nbAmis);
+    }
+
+    public void ajouterAmi(final String pseudo, final String id, final ajouterAmiCallback callback){
+        String url = "https://topmap.alwaysdata.net/ajouterAmi.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message = jsonObject.getString("message");
+                    boolean error = jsonObject.getBoolean("error");
+                    if(!error)
+                    {
+                        callback.onSuccess(message);
+                    }
+                    else
+                    {
+                        callback.onError(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> map = new HashMap<>();
+                map.put("pseudo", pseudo);
+                map.put("idUsers1", id);
+                return map;
+
+            }
+        };
+        queue.add(request);
+
+    }
+
+    public interface ajouterAmiCallback{
+        /**
+         * Si le script retourne error = false
+         * @param message : Affiche le message " 'pseudo' a été ajouté à votre liste d'ami"
+         */
+        void onSuccess(String message);
+
+        /**
+         * Si le script retourne error = true car l'erreur vient de la saisie du pseudo
+         * @param message : Affiche le message "Ce pseudo n'existe pas"
+         */
+        void onError(String message);
+    }
+
+    public void supprimerAmi(final String pseudo,final String id,final supprimerAmiCallback callback){
+        String url = "https://topmap.alwaysdata.net/supprimerAmi.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message = jsonObject.getString("message");
+                    boolean error = jsonObject.getBoolean("error");
+                    if(!error)
+                    {
+                        callback.onSuccess(message);
+                    }
+                    else
+                    {
+                        callback.onError(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> map = new HashMap<>();
+                map.put("pseudo", pseudo);
+                map.put("idUsers1", id);
+                return map;
+
+            }
+        };
+        queue.add(request);
+    }
+
+    public interface supprimerAmiCallback{
         void onSuccess(String message);
         void onError(String message);
     }

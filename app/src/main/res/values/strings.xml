@@ -18,11 +18,14 @@
     <string name="title_activity_create_account">CreateAccountActivity</string>
     <string name="createAcount">Créer un compte</string>
     <string name="creerGroupe">Creer un groupe</string>
-    <string name="carte">Voir la carte</string>
+    <string name="carte">Voir ma carte</string>
     <string name="ajouter_au_groupe">Ajouter un membre au groupe</string>
     <string name="voir_mes_gorupes">Voir mes groupes</string>
     <string name="ajouter_membre">Ajouter un membre</string>
     <string name="quitter_le_groupe">Quitter le groupe</string>
     <string name="supprimer_du_groupe">Supprimer du groupe</string>
     <string name="supprimer_le_membre">Supprimer le membre</string>
+    <string name="amis">Voir ma liste d\'amis</string>
+    <string name="ajouter_un_ami">Ajouter un ami</string>
+    <string name="supprimer_cet_ami">Supprimer cet ami</string>
 </resources>

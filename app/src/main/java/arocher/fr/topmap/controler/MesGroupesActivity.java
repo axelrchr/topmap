@@ -146,7 +146,6 @@ public class MesGroupesActivity extends AppCompatActivity {
             AlertDialog.Builder builderMembre = new AlertDialog.Builder(this);
             builderMembre.setTitle("Ajouter un membre");
             inputPseudo = new EditText(this);
-            Log.d("APP", String.valueOf(inputPseudo));
             builderMembre.setView(inputPseudo);
             builderMembre.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
                 @Override
@@ -220,6 +219,8 @@ public class MesGroupesActivity extends AppCompatActivity {
                             lv_groupe.setAdapter(null);
                             membreListe.clear();
                             lv_membres.setAdapter(null);
+                            btn_quitterGroupe.setEnabled(false);
+
                             request.recupGroupe(sessionManager.getId(), new MyRequest.recupGroupeCallback() {
                                 @Override
                                 public void onSuccess(String nom, int nbGroupe) {
@@ -229,9 +230,6 @@ public class MesGroupesActivity extends AppCompatActivity {
 
                                 @Override
                                 public void estVide() {
-                                    btn_quitterGroupe.setEnabled(false);
-                                    btn_ajouterMembres.setEnabled(false);
-                                    btn_supprimerMembre.setEnabled(false);
                                 }
                             });
                         }

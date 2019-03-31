@@ -16,29 +16,44 @@ import arocher.fr.topmap.myrequest.MyRequest;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputLayout til_name, til_firstname, til_dateNaiss, til_mail, til_tel, til_pseudo, til_password, til_password_verif;
-    private ProgressBar pb_loader;
-    private MyRequest request;
+    // DECLARATION DES VARIABLES
 
+        private TextInputLayout til_name, til_firstname, til_dateNaiss, til_mail, til_tel, til_pseudo, til_password, til_password_verif;
+        private ProgressBar pb_loader;
+        private MyRequest request;
+
+    /**
+     * Constructeur appellé au lancement de l'activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Button btn_send = findViewById(R.id.btn_send);
-        til_name = findViewById(R.id.til_name);
-        til_firstname = findViewById(R.id.til_firstname);
-        til_dateNaiss = findViewById(R.id.til_dateNaiss);
-        til_mail = findViewById(R.id.til_mail);
-        til_tel = findViewById(R.id.til_tel);
-        til_pseudo = findViewById(R.id.til_pseudo);
-        til_password = findViewById(R.id.til_password);
-        til_password_verif = findViewById(R.id.til_password_verif);
-        pb_loader = findViewById(R.id.pb_loader);
+        // INITIALISATION
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
-        request = new MyRequest(this, queue);
+            // Récupération des boutons du xml
+            Button btn_send = findViewById(R.id.btn_send);
+            // Récupération des TextInputLayout du xml
+            til_name = findViewById(R.id.til_name);
+            til_firstname = findViewById(R.id.til_firstname);
+            til_dateNaiss = findViewById(R.id.til_dateNaiss);
+            til_mail = findViewById(R.id.til_mail);
+            til_tel = findViewById(R.id.til_tel);
+            til_pseudo = findViewById(R.id.til_pseudo);
+            til_password = findViewById(R.id.til_password);
+            til_password_verif = findViewById(R.id.til_password_verif);
+            // Récupération de la ProgressBar du xml
+            pb_loader = findViewById(R.id.pb_loader);
 
+            // Initialisation de queue et request pour les requetes
+            RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+            request = new MyRequest(this, queue);
+
+        // COMPORTEMENT ASSOCIE AU BOUTON
+
+        // Bouton j'ai termine
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +69,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (name.length() > 0 && firstname.length() > 0 && dateNaiss.length() > 0 && mail.length() > 0 && tel.length() > 0 && pseudo.length() > 0 && password.length() > 0 && passwordVerif.length() > 0) {
                     request.register(name, firstname, dateNaiss, mail, tel, pseudo, password, passwordVerif, new MyRequest.RegisterCallback() {
+                        /**
+                         * Lance sur la page de connexion
+                         * @param message : Retourne le message "Inscription réussie"
+                         */
                         @Override
                         public void onSuccess(String message) {
                             pb_loader.setVisibility(View.GONE);
@@ -62,6 +81,11 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }
+
+                        /**
+                         * Place le message d'erreur sous le TextInputLayout correspondant
+                         * @param errors : Retourne une map qui contient un message d'erreur en fonction du champs ou se trouve l'erreur
+                         */
                         @Override
                         public void inputErrors(Map<String, String> errors) {
                             pb_loader.setVisibility(View.GONE);
@@ -108,6 +132,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 til_password.setErrorEnabled(false);
                             }
                         }
+
+                        /**
+                         * @param message :Affiche un message en fonction de l'erreur
+                         */
                         @Override
                         public void onError(String message) {
                             pb_loader.setVisibility(View.GONE);
@@ -121,5 +149,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Retourne sur la page précédente
+     * @param view
+     */
     public void retour(View view) { this.finish(); }
 }

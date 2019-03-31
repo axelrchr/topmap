@@ -31,19 +31,23 @@ import arocher.fr.topmap.myrequest.MyRequest;
 
 public class CarteActivity extends AppCompatActivity implements LocationListener {
 
-    private MapFragment mapFragment;
-    private GoogleMap googleMap;
-    private static final int PERMS_CALL_ID = 1234;
-    private LocationManager lm;
-    private Spinner spinner_groupe;
-    private MyRequest request;
-    private SessionManager sessionManager;
-    private String NOM = "";
-    private final List<String> groupeList = new ArrayList<>();
+    // DECLARATION DES VARIABLES
+
+        private MapFragment mapFragment;
+        private GoogleMap googleMap;
+        private static final int PERMS_CALL_ID = 1234;
+        private LocationManager lm;
+        private Spinner spinner_groupe;
+        private MyRequest request;
+        private SessionManager sessionManager;
+        private String NOM = "";
+        private final List<String> groupeList = new ArrayList<>();
+
+    // Lien vers la documentation de l'API google map
     // https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
 
     /**
-     *
+     * Constructeur appellé au lancement de l'activity
      * @param savedInstanceState
      */
     @Override
@@ -51,13 +55,18 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carte);
 
-        sessionManager = new SessionManager(this);
+        // INITIALISATION
 
-        FragmentManager fragmentManager = getFragmentManager();
-        mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+            // Initialisation de SessionManager pour récupérer les information de l'utilisateur connecté
+            sessionManager = new SessionManager(this);
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
-        request = new MyRequest(this, queue);
+            // Itilialisation de Fragment ou se trouve la carte
+            FragmentManager fragmentManager = getFragmentManager();
+            mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+
+            // Initialisation de queue et request pour les requetes
+            RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+            request = new MyRequest(this, queue);
 
         // SPINNER CHOIX GROUPE ACTUEL
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groupeList);
@@ -69,12 +78,12 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_groupe.setAdapter(adapter);
             }
-
             @Override
             public void estVide() {
                 Toast.makeText(getApplicationContext(), "Vous n'êtes dans aucun groupe", Toast.LENGTH_SHORT).show();
             }
         });
+
         // SELECTION DU GROUPE
         spinner_groupe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -139,6 +148,9 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         }
     }
 
+    /**
+     * Fonction appelée lorsque la map est chargé la premiere fois
+     */
     @SuppressWarnings("MissingPermission")
     private void loadMap() {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -174,6 +186,10 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     public void onProviderEnabled(String provider) {
     }
 
+    /**
+     * Fonction appellée lorsque la location actuelle change
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         // Récupération de la latitude et de la longitude grace à Location

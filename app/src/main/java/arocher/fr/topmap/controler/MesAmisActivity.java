@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,12 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.android.volley.RequestQueue;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import arocher.fr.topmap.R;
 import arocher.fr.topmap.SessionManager;
 import arocher.fr.topmap.VolleySingleton;
@@ -26,14 +22,20 @@ import arocher.fr.topmap.myrequest.MyRequest;
 
 public class MesAmisActivity extends AppCompatActivity {
 
-    private ListView lv_amis;
-    private MyRequest request;
-    private SessionManager sessionManager;
-    private EditText inputPseudo;
-    private String pseudoAmi;
-    private View LASTVIEWAMI;
-    private String PSEUDO;
+    // DECLARATION DES VARIABLES
 
+        private ListView lv_amis;
+        private MyRequest request;
+        private SessionManager sessionManager;
+        private EditText inputPseudo;
+        private String pseudoAmi;
+        private View LASTVIEWAMI;
+        private String PSEUDO;
+
+    /**
+     * Constructeur appellé au lancement de l'activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +76,6 @@ public class MesAmisActivity extends AppCompatActivity {
 
                 @Override
                 public void estVide() {
-
                 }
             });
 
@@ -127,7 +128,7 @@ public class MesAmisActivity extends AppCompatActivity {
             });
             final AlertDialog ajoutAmi = builderAmi.create();
 
-    // CREATION DE LA BOITE DE DIALOGUE POUR DEMANDER CONFIRMATION AVANT DE SUPPRIMER UN AMI
+            // CREATION DE LA BOITE DE DIALOGUE POUR DEMANDER CONFIRMATION AVANT DE SUPPRIMER UN AMI
             AlertDialog.Builder builderConfirmationSupprAmi = new AlertDialog.Builder(this);
             builderConfirmationSupprAmi.setTitle("Voulez vous vraiment quitter le groupe selectionné ?");
             builderConfirmationSupprAmi.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
@@ -149,10 +150,7 @@ public class MesAmisActivity extends AppCompatActivity {
 
                                 @Override
                                 public void estVide() {
-
                                 }
-
-
                             });
                         }
 
@@ -174,21 +172,20 @@ public class MesAmisActivity extends AppCompatActivity {
 
         // COMPORTEMENT ASSOCIE AUX BOUTONS
 
-        // Bouton ajouter
-        btn_ajouterAmi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ajoutAmi.show();
-            }
-        });
+            // Bouton ajouter
+            btn_ajouterAmi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ajoutAmi.show();
+                }
+            });
 
-        // Bouton supprimer
-        btn_supprimerAmi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmationSupprAmi.show();
-            }
-        });
-
+            // Bouton supprimer
+            btn_supprimerAmi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmationSupprAmi.show();
+                }
+            });
     }
 }

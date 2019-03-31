@@ -617,6 +617,13 @@ public class MyRequest {
         void onError(String message);
     }
 
+    /**
+     * Supprime le membre selectionné du groupe selectionné
+     * Seul le chef du groupe peut supprimer un membre
+     * @param pseudo : Pseudo du membre a supprimer
+     * @param nomGroupe : Nom du groupe concerné
+     * @param callback
+     */
     public void supprimerMembre(final String pseudo,final String nomGroupe,final supprimerMembreCallback callback){
         String url = "https://topmap.alwaysdata.net/supprimerMembre.php";
 
@@ -663,6 +670,11 @@ public class MyRequest {
         void onError(String message);
     }
 
+    /**
+     * Récupère la liste d'amis de l'utilisateur connecté
+     * @param id : Id de l'utilisateur connecté qui veut récupéré sa liste d'amis
+     * @param callback
+     */
     public void recupAmis (final String id,final recupAmisCallback callback) {
         String url = "https://topmap.alwaysdata.net/recupAmi.php";
 
@@ -708,6 +720,12 @@ public class MyRequest {
         void estVide();
     }
 
+    /**
+     * Ajoute un ami dans la liste d'ami
+     * @param pseudo : Pseudo de la personne a ajouter dans la liste
+     * @param id : Id de l'utilisateur connecté qui veut ajouter un ami
+     * @param callback
+     */
     public void ajouterAmi(final String pseudo, final String id, final ajouterAmiCallback callback){
         String url = "https://topmap.alwaysdata.net/ajouterAmi.php";
 
@@ -762,6 +780,12 @@ public class MyRequest {
         void onError(String message);
     }
 
+    /**
+     * Supprime l'ami selectionné de la liste d'amis
+     * @param pseudo : Pseudo de l'ami a supprimer
+     * @param id : Id de l'utilisateur connecté
+     * @param callback
+     */
     public void supprimerAmi(final String pseudo,final String id,final supprimerAmiCallback callback){
         String url = "https://topmap.alwaysdata.net/supprimerAmi.php";
 

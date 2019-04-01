@@ -130,7 +130,7 @@ public class MesAmisActivity extends AppCompatActivity {
 
             // CREATION DE LA BOITE DE DIALOGUE POUR DEMANDER CONFIRMATION AVANT DE SUPPRIMER UN AMI
             AlertDialog.Builder builderConfirmationSupprAmi = new AlertDialog.Builder(this);
-            builderConfirmationSupprAmi.setTitle("Voulez vous vraiment quitter le groupe selectionné ?");
+            builderConfirmationSupprAmi.setTitle("Voulez vous vraiment supprimer cet ami ?");
             builderConfirmationSupprAmi.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

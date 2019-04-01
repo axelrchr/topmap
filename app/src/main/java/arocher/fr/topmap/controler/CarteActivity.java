@@ -20,7 +20,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,7 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         private SessionManager sessionManager;
         private String NOM = "";
         private final List<String> groupeList = new ArrayList<>();
+        private LatLng latLngMarker = null;
 
     // Lien vers la documentation de l'API google map
     // https://developers.google.com/maps/documentation/android-sdk/location?hl=fr
@@ -155,10 +160,18 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
     private void loadMap() {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(GoogleMap googleMap) {
+            public void onMapReady(final GoogleMap googleMap) {
                 CarteActivity.this.googleMap = googleMap;
                 googleMap.moveCamera(CameraUpdateFactory.zoomBy( 50 ));
                 googleMap.setMyLocationEnabled( true );
+
+                googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                    @Override
+                    public void onMapLongClick(LatLng latLng) {
+                        latLngMarker = latLng;
+                        googleMap.addMarker(new MarkerOptions().position(latLngMarker).title("POINT RDV DE " + sessionManager.getPseudo()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    }
+                });
             }
         });
         // Récupération de la lat et lng dans la bd de l'utilisateur connecté pour centrer sur sa derniere pos
@@ -195,8 +208,8 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
         // Récupération de la latitude et de la longitude grace à Location
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        String lat =  Double.toString(latitude);
-        String lng =  Double.toString(longitude);
+        String lat = Double.toString(latitude);
+        String lng = Double.toString(longitude);
         String id = sessionManager.getId();
         // Mise a jour des lat et lng dans la bd
         request.envoyerCoordonnee(lat, lng, id);
@@ -209,7 +222,10 @@ public class CarteActivity extends AppCompatActivity implements LocationListener
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(pseudo));
             }
         });
-        Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Location : " + latitude + " / " + longitude, Toast.LENGTH_LONG).show();
+        if (latLngMarker != null) {
+            googleMap.addMarker(new MarkerOptions().position(latLngMarker).title("POINT RDV DE " + sessionManager.getPseudo()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        }
     }
 
     @Override
